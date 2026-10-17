@@ -1,0 +1,25 @@
+[project]
+name = "mlit-underpass-2026-10"
+version = "0.1.0"
+description = "Reproducible collection of the national underpass map (全国のアンダーパス箇所マップ) of MLIT"
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface-hub>=2.2.0",
+    "pyarrow>=26.0.0",
+    "shapely>=2.1.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=9.1.1", "ruff>=0.16.9"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["scripts"]
