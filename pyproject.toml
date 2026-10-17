@@ -1,5 +1,5 @@
 [project]
-name = "mlit-underpass-2026-10"
+name = "mlit-underpass"
 version = "0.1.0"
 description = "Reproducible collection of the national underpass map (全国のアンダーパス箇所マップ) of MLIT"
 requires-python = ">=3.12"

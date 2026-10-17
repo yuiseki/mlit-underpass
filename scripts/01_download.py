@@ -21,7 +21,7 @@ from pathlib import Path
 import underpass as u
 
 ROOT = Path(__file__).parents[1]
-UA = "mlit-underpass-2026-10/0.1 (+https://github.com/yuiseki/mlit-underpass-2026-10)"
+UA = "mlit-underpass/0.1 (+https://github.com/yuiseki/mlit-underpass)"
 
 
 def get(url: str) -> tuple[bytes, dict[str, str]]:

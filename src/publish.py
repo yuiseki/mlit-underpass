@@ -16,7 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
-REPO = "yuiseki/mlit-underpass-2026-10"
+REPO = "yuiseki/mlit-underpass"
 DELETE_PATTERNS = ["raw/**", "parquet/**"]
 
 

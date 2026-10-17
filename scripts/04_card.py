@@ -11,7 +11,7 @@ from pathlib import Path
 import underpass as u
 
 ROOT = Path(__file__).parents[1]
-REPO = "mlit-underpass-2026-10"
+REPO = "mlit-underpass"
 
 CARD = """---
 license: cc-by-4.0
