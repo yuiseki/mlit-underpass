@@ -22,7 +22,6 @@ tags:
 - geospatial
 - japan
 - road
-- flood
 - underpass
 size_categories:
 - 1K<n<10K
@@ -32,8 +31,12 @@ size_categories:
 
 The points of the national underpass map (全国のアンダーパス箇所マップ) of the Ministry of Land,
 Infrastructure, Transport and Tourism (国土交通省 道路局): {rows:,} points of road sections that
-are much lower than the sections before and after them, where heavy rain can flood the road.
-One file for all of Japan and one file per prefecture, as GeoParquet.
+are much lower than the sections before and after them. The ministry defines an underpass section
+(アンダーパス部) as a section "that crosses a road or a railway, mainly in built-up areas, and is
+sharply lower than the sections before and after it", and counts only roads managed by the national
+and local governments (the notes of its per-prefecture table, <https://www.mlit.go.jp/road/content/002022076.pdf>,
+as of R7.3.31). The list is of underpasses by structure, not a selection of the dangerous ones; it
+says nothing about flood risk per point. One file for all of Japan and one file per prefecture, as GeoParquet.
 
 ## Source
 
@@ -76,6 +79,10 @@ One file for all of Japan and one file per prefecture, as GeoParquet.
 
 ## Known issues
 
+- The ministry's per-prefecture table (the PDF above) gives the same total, 3,841, and the same
+  count for each of the 47 prefectures as the prefecture column built here (compared on 2026-10-17).
+- Roads of the expressway companies are outside the ministry's count (it covers national and local
+  government roads), so this is not every underpass in Japan.
 - The source has no attribute besides name, route and manager. There is no depth, no
   closure rule and no date per point.
 - The map is as of R7.3.31 (31 March 2025), although the page was updated later.
