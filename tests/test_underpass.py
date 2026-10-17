@@ -52,3 +52,26 @@ def test_assign_prefecture_inside_and_nearest():
     codes, dist = u.assign_prefecture([(0.5, 0.5), (1.9, 0.5), (2.5, 0.5)], polys, ["01", "02"])
     assert codes == ["01", "02", "02"]
     assert dist[0] == 0.0 and dist[2] == 0.0 and dist[1] == pytest.approx(0.1)
+
+
+def test_geo_metadata_crs_follows_the_geoparquet_spec():
+    geo = u.geo_metadata()
+    col = geo["columns"]["geometry"]
+    assert geo["version"] == "1.1.0" and geo["primary_column"] == "geometry"
+    assert col["encoding"] == "WKB" and col["geometry_types"] == ["Point"]
+    # the spec: crs is a PROJJSON object or null; leaving it out means OGC:CRS84. Never a string.
+    assert "crs" not in col or col["crs"] is None or isinstance(col["crs"], dict)
+
+
+def test_written_parquet_carries_that_metadata(tmp_path):
+    import json
+
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    t = pa.table({"geometry": [b"\x01"]}).replace_schema_metadata(
+        {b"geo": json.dumps(u.geo_metadata()).encode()}
+    )
+    pq.write_table(t, tmp_path / "x.parquet")
+    geo = json.loads(pq.read_schema(tmp_path / "x.parquet").metadata[b"geo"])
+    assert not isinstance(geo["columns"]["geometry"].get("crs"), str)

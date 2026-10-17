@@ -22,6 +22,20 @@ BLOCKS = {
 }
 
 
+def geo_metadata() -> dict:
+    """The GeoParquet 1.1 ``geo`` metadata of the point files.
+
+    ``crs`` is left out on purpose: the spec reads that as OGC:CRS84 (longitude, latitude), which is
+    what the map's coordinates are. A string such as "EPSG:4326" is not valid there (a PROJJSON
+    object or null only), and DuckDB refuses the file.
+    """
+    return {
+        "version": "1.1.0",
+        "primary_column": "geometry",
+        "columns": {"geometry": {"encoding": "WKB", "geometry_types": ["Point"]}},
+    }
+
+
 def parse_blocks(html: str) -> list[str]:
     """The relative GeoJSON paths the page loads, in page order."""
     paths = re.findall(r"'geojson'\s*:\s*'\./([^']+)'", html)

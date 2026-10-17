@@ -66,7 +66,7 @@ says nothing about flood risk per point. One file for all of Japan and one file 
 | `pref_code`, `pref` | the prefecture, found here from the point (see below), not published by the source |
 | `pref_dist_deg` | 0 when the point lies inside the prefecture polygon, otherwise the distance to the nearest one in degrees; {outside} points are outside |
 | `lon`, `lat` | the coordinates as published |
-| `geometry` | the same point as WKB; EPSG:4326 as the map draws it (the source states no CRS) |
+| `geometry` | the same point as WKB. The file states no CRS (GeoParquet then means OGC:CRS84, longitude and latitude), which is how the map draws the coordinates |
 
 ## What was changed
 

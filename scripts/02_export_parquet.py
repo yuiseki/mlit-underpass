@@ -3,7 +3,7 @@
 Each row: id (block code and the point's order in its file), block, name, route, manager,
 pref_code, pref (from the 47 prefecture polygons of yuiseki/jp-admin-2026-09, CC BY 4.0),
 pref_dist_deg (0 when the point lies inside the polygon, else the distance to the nearest one),
-lon, lat and geometry (WKB point, EPSG:4326 as the page's map draws it; the file states no CRS).
+lon, lat and geometry (WKB point; the file states no CRS, the map draws longitude and latitude, so OGC:CRS84).
 data/parquet/national.parquet holds all points; data/parquet/prefectures/<code>.parquet the points of
 one prefecture (prefectures without points get no file).
 
@@ -23,11 +23,7 @@ from shapely.geometry import Point
 
 ROOT = Path(__file__).parents[1]
 ADMIN = Path("/sata_hdd_24tb/hf_data/__published/jp-admin-2026-09/data/prefectures.parquet")
-GEO = {
-    "version": "1.1.0",
-    "primary_column": "geometry",
-    "columns": {"geometry": {"encoding": "WKB", "geometry_types": ["Point"], "crs": "EPSG:4326"}},
-}
+GEO = u.geo_metadata()
 
 
 def write(rows: list[dict], path: Path) -> None:
