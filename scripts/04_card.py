@@ -37,9 +37,9 @@ One file for all of Japan and one file per prefecture, as GeoParquet.
 
 ## Source
 
-- Map page: <{page}>, which loads {nfiles} GeoJSON blocks (one per regional bureau).
+- Map page: <{page}>, which loads {nfiles} GeoJSON blocks (one per regional block of the page: 北海道地方 to 沖縄地方).
 - Index page: <{index}>, which gives the count ("about 3,800 places") and the date of the map (R7.3.31).
-- Fetched {fetched}. The server states Last-Modified {lm} for the page and the blocks.
+- Fetched {fetched}. The server states Last-Modified {lm_blocks} for the {nfiles} blocks and {lm_page} for the page.
   The blocks are kept unchanged under `raw/{version}/` with their sha256 in `MANIFEST.json`.
 
 ## Files
@@ -70,7 +70,8 @@ One file for all of Japan and one file per prefecture, as GeoParquet.
 - The three properties of each feature were renamed (`name`, `路線名` to `route`, `管理者` to
   `manager`); the map's icon settings were dropped.
 - `pref_code` and `pref` were added by testing each point against the 47 prefecture polygons of
-  [yuiseki/jp-admin-2026-09](https://huggingface.co/datasets/yuiseki/jp-admin-2026-09) (CC BY 4.0).
+  [yuiseki/jp-admin-2026-09](https://huggingface.co/datasets/yuiseki/jp-admin-2026-09) (CC BY 4.0,
+  revision `e6c87b1d7095c17422147962185071a986e13135`).
 - Nothing was removed, corrected or deduplicated.
 
 ## Known issues
@@ -89,7 +90,8 @@ One file for all of Japan and one file per prefecture, as GeoParquet.
 
 The page falls under the MLIT site terms, <https://www.mlit.go.jp/link.html>: Public Data License
 1.0 (PDL1.0) unless another rule is stated, which is compatible with CC BY 4.0. This dataset is
-offered under CC BY 4.0. Credit, as the terms ask:
+offered under CC BY 4.0. The list of contents under other rules that the terms point to
+(<https://www.mlit.go.jp/page/kanbo01_hy_003657.html>) does not include this map (read on 2026-10-17). Credit, as the terms ask:
 
 > 出典：「全国のアンダーパス箇所マップ」（国土交通省）（{page}）をもとに作成
 
@@ -127,7 +129,8 @@ def main() -> int:
         nfiles_pref=cols["prefecture_files"],
         version=a.version,
         fetched=manifest["fetched_at"][:10],
-        lm=" / ".join(sorted(lms)),
+        lm_blocks=" / ".join(sorted({m["last_modified"] for m in manifest["files"].values()})),
+        lm_page=manifest["page_last_modified"],
         outside=cols["points_outside_every_polygon"],
         dups=dups,
         dups_same=dups_same,
@@ -148,7 +151,7 @@ def main() -> int:
     (data / "provenance.yaml").write_text(
         f"source: {u.PAGE_URL}\nindex: {u.INDEX_URL}\nterms: https://www.mlit.go.jp/link.html\n"
         f"fetched_at: {manifest['fetched_at']}\nlast_modified: {sorted(lms)}\n"
-        "prefecture_polygons: yuiseki/jp-admin-2026-09 (prefectures.parquet)\n",
+        "prefecture_polygons: yuiseki/jp-admin-2026-09 (prefectures.parquet), revision e6c87b1d7095c17422147962185071a986e13135\n",
         encoding="utf-8",
     )
     print("wrote data/README.md, LICENSE, provenance.yaml")
